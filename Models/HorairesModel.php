@@ -25,7 +25,7 @@ class HorairesModel extends MongoConnection
 
     public function getAllHoraires()
     {
-        return $this->collection->find()->toArray();
+        return $this->collection->find([], ['sort' => ['index' => 1]])->toArray();
     }
 
     public function ajouterHoraire($jour, $ouverture, $fermeture)
