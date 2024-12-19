@@ -70,3 +70,4 @@ echo '<link rel="stylesheet" href="/Asset/css/nosanimaux.css">';
 
 <script src="/Asset/Js/detailsanimaux.js"></script>
 <script src="/Asset/Js/clicsvisite.js"></script>
+
