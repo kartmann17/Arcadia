@@ -2,15 +2,15 @@
 
 namespace App\Controllers;
 
-use App\Models\UniversModel;
+use App\Repository\UniversRepository;
 
 class UniversController extends Controller
 {
     public function index()
     {
         $title = "Nos Univers";
-        $UniversModel = new UniversModel();
-        $univers = $UniversModel->findAll();
+        $UniversRepository = new UniversRepository();
+        $univers = $UniversRepository->findAll();
         $this->render('nos_univers/index', [
             'univers' => $univers,
             'title' => $title
@@ -21,9 +21,9 @@ class UniversController extends Controller
     //affichage animanux par habitat dans page nos univers
     public function showAnimaux($id)
     {
-        $universModel = new UniversModel();
-        $univers = $universModel->getDetails($id);
-        $Habitat = $universModel->find($id);
+        $universRepository = new UniversRepository();
+        $univers = $universRepository->getDetails($id);
+        $Habitat = $universRepository->find($id);
 
         $this->render('nos_univers/show', [
             'univer' => $univers,

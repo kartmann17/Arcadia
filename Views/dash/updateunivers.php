@@ -1,5 +1,5 @@
 <?php
-echo '<link rel="stylesheet" href="/Asset/css/dashindex.css">';
+$css = 'dashindex';
 ?>
 
 <div class="vide"></div>
@@ -27,7 +27,7 @@ echo '<link rel="stylesheet" href="/Asset/css/dashindex.css">';
                             <div class="mb-3">
                                 <label for="current_image" class="form-label">Image actuelle</label>
                                 <div class="mb-3">
-                                    <img src="/Asset/Images/<?= htmlspecialchars($univers->img, ENT_QUOTES, 'UTF-8') ?>" alt="Image actuelle" class="img-fluid">
+                                    <img src="<?= htmlspecialchars($univers->img, ENT_QUOTES, 'UTF-8') ?>" alt="Image actuelle" class="img-fluid">
                                 </div>
                             </div>
 

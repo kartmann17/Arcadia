@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\AvisModel;
+use App\Repository\AvisRepository;
 
 class AvisController extends MainController
 {
@@ -31,8 +31,8 @@ class AvisController extends MainController
 
             // Vérification que tous les champs son remplis
             if (!empty($etoiles) && !empty($nom) && !empty($commentaire)) {
-                $AvisModel = new AvisModel();
-                $result = $AvisModel->saveAvis($etoiles, $nom, $commentaire, $date);
+                $AvisRepository = new AvisRepository();
+                $result = $AvisRepository->saveAvis($etoiles, $nom, $commentaire, $date);
 
                 if ($result) {
 

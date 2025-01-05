@@ -2,15 +2,16 @@
 
 namespace App\Controllers;
 
-use App\Models\RaceModel;
+use App\Repository\RaceRepository;
+use App\Services\raceService;
 
 class DashRaceController extends DashController
 {
     // affichage de la liste des races
     public function liste()
     {
-        $RaceModel = new RaceModel();
-        $races = $RaceModel->findAll();
+        $RaceRepository = new RaceRepository();
+        $races = $RaceRepository->findAll();
 
         if (isset($_SESSION['id_User'])) {
             $title = "Liste Races";
@@ -26,8 +27,8 @@ class DashRaceController extends DashController
     // ajout des races
     public function ajoutRace()
     {
-        $RaceModel = new RaceModel();
-        $races = $RaceModel->findAll();
+        $RaceRepository = new RaceRepository();
+        $races = $RaceRepository->findAll();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Récupération des données du formulaire
@@ -38,8 +39,8 @@ class DashRaceController extends DashController
             if (!empty($race)) {
 
                 // Appel du modèle pour l'insertion en base
-                $RaceModel = new RaceModel();
-                $result = $RaceModel->addRace($race);
+                $RaceRepository = new RaceRepository();
+                $result = $RaceRepository->addRace($race);
 
                 if ($result) {
                     $_SESSION['success_message'] = "Race ajoutée avec succès.";
@@ -62,9 +63,9 @@ class DashRaceController extends DashController
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                $RaceModel = new RaceModel();
+                $RaceRepository = new RaceRepository();
 
-                $result = $RaceModel->deleteById($id);
+                $result = $RaceRepository->deleteById($id);
 
                 if ($result) {
                     $_SESSION['success_message'] = "La race a été supprimé avec succès.";
@@ -84,28 +85,20 @@ class DashRaceController extends DashController
     // mise a jour de la race
     public function updateRace($id)
     {
-        $RaceModels = new RaceModel();
-        $races = $RaceModels->find($id);
+        $raceService = new raceService();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+            $raceService->updateRace($id);
 
-            // Vérification que tous les champs sont remplis
-            $RaceModels->hydrate($_POST);
-
-            // Appel du modèle pour l'insertion en base
-            if ($RaceModels->update($id)) {
-
-
-                $_SESSION["success_message"] = "Race modifié avec succès.";
-            } else {
-                $_SESSION["error_message"] = "Erreur lors de la modification.";
-            }
-
-            // Redirection après traitement
-            header("Location: /dash");
+            $_SESSION['success_message'] = "Race modifié avec succès.";
+            header("Location: /DashRace/liste");
             exit;
         }
+
+        $RaceRepository = new RaceRepository();
+        $races = $RaceRepository->find($id);
+
         $title = "Modifier Race";
         $this->render('dash/updateraces', [
             'races' => $races,

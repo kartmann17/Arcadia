@@ -7,7 +7,6 @@ function showModal(name, age, race, habitat, description, imgSrc) {
         }
     };
 
-    // évite les injections XSS
     setTextContent('modal-animal-name', name);
     setTextContent('modal-animal-age', age);
     setTextContent('modal-animal-race', race);
@@ -20,7 +19,7 @@ function showModal(name, age, race, habitat, description, imgSrc) {
         if (imgSrc.startsWith('/Asset/Images/')) {
             imgElement.src = imgSrc;
         } else {
-            imgElement.src = '/Asset/Images/default.png'; 
+            imgElement.src = '/Asset/Images/default.png';
         }
     }
 

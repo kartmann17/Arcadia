@@ -8,10 +8,6 @@ class RoleModel extends Model
     protected $id;
     protected $role;
 
-    public function __construct()
-    {
-        $this->table = 'Role';
-    }
 
     /**
      * Get the value of id

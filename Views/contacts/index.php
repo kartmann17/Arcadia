@@ -1,6 +1,5 @@
-
 <?php
-echo '<link rel="stylesheet" href="../Asset/css/contact.css">';
+$css = 'contact';
 ?>
 
 <div class="vide"></div>

@@ -1,5 +1,6 @@
+
 <?php
-echo '<link rel="stylesheet" href="/Asset/css/cgu.css">';
+$css = 'cgu';
 ?>
 <div class="vide"></div>
 

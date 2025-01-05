@@ -1,5 +1,5 @@
 <?php
-echo '<link rel="stylesheet" href="/Asset/css/mention.css">';
+$css = 'mention';
 ?>
 <div class="vide"></div>
 

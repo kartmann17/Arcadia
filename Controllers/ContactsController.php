@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-use App\Models\ContactsModel;
+use App\Repository\ContactsRepository;
 
 class ContactsController extends Controller
 {
@@ -19,8 +19,8 @@ class ContactsController extends Controller
     public function afficheMessage()
     {
 
-        $ContactsModel = new ContactsModel();
-        $contacts = $ContactsModel->findAll();
+        $ContactsRepository = new ContactsRepository();
+        $contacts = $ContactsRepository->findAll();
         $this->render("dash/listecontact", ['contacts' => $contacts]);
     }
 
@@ -43,8 +43,8 @@ class ContactsController extends Controller
                 $adminMessage .= "Message : $message\n";
 
                 // Enregistrement du message dans la base de données
-                $ContactsModel = new ContactsModel();
-                $result = $ContactsModel->saveMessage($nom, $email, $message);
+                $ContactsRepository = new ContactsRepository();
+                $result = $ContactsRepository->saveMessage($nom, $email, $message);
 
                 // Envoi de l'email à l'admin
                 if ($this->sendEmail($adminEmail, $adminSubject, $adminMessage)) {
@@ -85,9 +85,9 @@ class ContactsController extends Controller
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                $ContactsModel = new ContactsModel();
+                $ContactsRepository = new ContactsRepository();
 
-                $result =  $ContactsModel->deleteById($id);
+                $result =  $ContactsRepository->deleteById($id);
 
                 if ($result) {
                     $_SESSION['success_message'] = "Le contact a été supprimé avec succès.";
@@ -106,7 +106,7 @@ class ContactsController extends Controller
         $mail = new PHPMailer(true);
         try {
 
-            
+
             // Configuration du serveur SMTP
             $mail->isSMTP();
             $mail->Host = $_ENV['SMTP_HOST'];

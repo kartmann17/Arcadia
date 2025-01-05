@@ -2,46 +2,60 @@
 
 namespace App\Controllers;
 
-use App\Models\UniversModel;
+use App\Repository\UniversRepository;
+use App\Services\universService;
+use App\Services\CloudinaryService;
 
 class DashUniversController extends DashController
 {
     //Ajout d'un habitat (univer)
     public function ajoutUnivers()
     {
-        $UniversModel = new UniversModel();
-        $univers = $UniversModel->findAll();
+        $universRepository = new UniversRepository();
+        $cloudinaryService = new CloudinaryService();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $imgPath = null;
 
-            // Récupération des données du formulaire
-            $nom = $_POST['nom'] ?? '';
-            $img = $_POST['img'] ?? '';
-            $description = $_POST['description'] ?? '';
+            if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
+                $tmpName = $_FILES['img']['tmp_name'];
 
+                $cloudinaryService = new CloudinaryService();
+                $imgPath = $cloudinaryService->uploadFile($tmpName);
 
-
-            //Verification de tous les champ sont remplis
-            if (!empty($nom) && !empty($img) && !empty($description)) {
-
-                // Appel du modèle pour l'insertion en base
-                $UniversModel = new UniversModel();
-                $result = $UniversModel->addUnivers($nom, $img, $description);
-
-
-                if ($result) {
-                    $_SESSION["success_message"] = "Habitat ajouté avec succès.";
-                } else {
-                    $_SESSION["error_message"] = "Erreur lors de l'ajout de l'habitat.";
+                if (!$imgPath) {
+                    $_SESSION['error_message'] = "Erreur lors du téléversement de l'image.";
+                    header("Location: /addunivers");
+                    exit;
                 }
-
-                // Redirection après traitement
-                header("Location: /dash");
-                exit();
-            } else {
-                echo "Tous les champs sont requis.";
             }
+            // Hydratation des données
+            $data = [
+                'nom' => $_POST['nom'] ?? null,
+                'img' => $imgPath,
+                'description' => $_POST['description'] ?? null,
+            ];
+
+
+            // Insertion en base de données
+            $UniversRepository = new UniversRepository();
+            $result = $UniversRepository->addUnivers(
+                $data['nom'],
+                $data['img'],
+                $data['description']
+            );
+
+            if ($result) {
+                $_SESSION["success_message"] = "Habitat ajouté avec succès.";
+            } else {
+                $_SESSION["error_message"] = "Erreur lors de l'ajout de l'habitat.";
+            }
+
+            // Redirection après traitement
+            header("Location: /DashUnivers/liste");
+            exit();
         }
+
         if (isset($_SESSION['role']) && $_SESSION['role'] === 'Admin') {
             $this->render('dash/index', [
                 'section' => 'addunivers'
@@ -55,27 +69,23 @@ class DashUniversController extends DashController
     //mise à jour des habitat (univer)
     public function updateUnivers($id)
     {
-        $UniversModel = new UniversModel();
-        $univers = $UniversModel->find($id);
+        $UniversService = new UniversService();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+            // Appel du service pour gerer le téléversement d'image et la mise a jour
+            $UniversService->updateUnivers($id);
 
-            // Vérification que tous les champs sont remplis
-            $UniversModel->hydrate($_POST);
-
-            // Appel du modèle pour l'insertion en base
-            if ($UniversModel->update($id)) {
-
-
-                $_SESSION["success_message"] = "Univer modifié avec succès.";
-            } else {
-                $_SESSION["error_message"] = "Erreur lors de la modification.";
-            }
-
-            // Redirection après traitement
-            header("Location: /dash");
+            $_SESSION["success_message"] = "Univer modifié avec succès.";
+            header("Location: /DashUnivers/liste");
             exit;
+        }
+
+        $UniversRepository = new UniversRepository();
+        $univers = $UniversRepository->find($id);
+
+        if (!$univers) {
+            throw new \Exception("Univer introuvable.");
         }
 
         $this->render('dash/updateunivers', [
@@ -87,24 +97,34 @@ class DashUniversController extends DashController
     public function deleteUniver()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                $UniversModel = new UniversModel();
+                $universRepository = new UniversRepository();
+                $cloudinaryService = new CloudinaryService();
 
-                $result = $UniversModel->deleteById($id);
+                $univers = $universRepository->find($id);
 
-                if ($result) {
-                    $_SESSION['success_message'] = "L'habitat a été supprimé avec succès.";
+                if ($univers) {
+                    if (!empty($univers->img)) {
+                        $publicId = $cloudinaryService->getPublicIdFromUrl($univers->img);
+                        $cloudinaryService->deleteFile($publicId);
+                    }
+
+                    $result = $universRepository->deleteById($id);
+
+                    if ($result) {
+                        $_SESSION['success_message'] = "L'habitat a été supprimé avec succès.";
+                    } else {
+                        $_SESSION['error_message'] = "Erreur lors de la suppression de l'habitat.";
+                    }
                 } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression de l'habitat.";
+                    $_SESSION['error_message'] = "Habitat introuvable.";
                 }
             } else {
                 $_SESSION['error_message'] = "ID d'habitat invalide.";
             }
 
-            // Redirection vers le dashboard
             header("Location: /dash");
             exit();
         }
@@ -113,8 +133,8 @@ class DashUniversController extends DashController
     // Liste des habitats (univer)
     public function liste()
     {
-        $UniversModel = new UniversModel();
-        $univers = $UniversModel->findAll();
+        $UniversRepository = new UniversRepository();
+        $univers = $UniversRepository->findAll();
 
         if (isset($_SESSION['id_User'])) {
             $this->render('dash/listeunivers', [
@@ -124,6 +144,7 @@ class DashUniversController extends DashController
             http_response_code(404);
         }
     }
+
     public function index()
     {
         if (isset($_SESSION['id_User'])) {

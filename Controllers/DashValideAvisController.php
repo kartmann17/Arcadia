@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\AvisModel;
+use App\Repository\AvisRepository;
 
 class DashValideAvisController extends DashController
 {
@@ -10,8 +10,8 @@ class DashValideAvisController extends DashController
     // affichage de la liste des avis
     public function liste()
     {
-        $AvisModel = new AvisModel();
-        $Avis = $AvisModel->findAll();
+        $AvisRepository = new AvisRepository();
+        $Avis = $AvisRepository->findAll();
         if (isset($_SESSION['id_User'])) {
             $this->render(
                 "dash/listeavis",
@@ -30,9 +30,9 @@ class DashValideAvisController extends DashController
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                $AvisModel = new AvisModel();
+                $AvisRepository = new AvisRepository();
 
-                $result = $AvisModel->deleteById($id);
+                $result = $AvisRepository->deleteById($id);
 
                 if ($result) {
                     $_SESSION['success_message'] = "L'avis a été supprimé avec succès.";
@@ -55,8 +55,8 @@ class DashValideAvisController extends DashController
         if (isset($_POST['id'])) {
             $id = $_POST['id'];
 
-            $avisModel = new AvisModel();
-            $avisModel->DashValiderAvis($id);
+            $avisRepository = new AvisRepository();
+            $avisRepository->DashValiderAvis($id);
 
             header("Location: /dash");
             exit();
@@ -69,8 +69,8 @@ class DashValideAvisController extends DashController
     //affichage de la page valider avis avec uniquement les avis non validé
     public function index()
     {
-        $AvisModel = new AvisModel();
-        $Avis = $AvisModel->findNonValides(); //affichage uniquemenbt des avis non validé
+        $AvisRepository = new AvisRepository();
+        $Avis = $AvisRepository->findNonValides(); //affichage uniquemenbt des avis non validé
         if (isset($_SESSION['id_User'])) {
             $this->render("dash/valideavis", compact("Avis"));
         } else {

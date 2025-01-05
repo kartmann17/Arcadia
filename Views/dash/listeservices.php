@@ -1,5 +1,5 @@
 <?php
-echo '<link rel="stylesheet" href="/Asset/css/dashindex.css">';
+$css = 'dashindex';
 ?>
 
 <div class="vide"></div>
@@ -22,7 +22,7 @@ echo '<link rel="stylesheet" href="/Asset/css/dashindex.css">';
                     <tr>
                         <td><?= $service->nom ?></td>
                         <td>
-                            <img src="/Asset/Images/<?= $service->img ?>" class="img-thumbnail" alt="image de <?= $service->nom ?>" width="80" height="80" />
+                            <img src="<?= $service->img ?>" class="img-thumbnail" alt="image de <?= $service->nom ?>" width="80" height="80" />
                         </td>
                         <td><?= $service->description ?></td>
                         <td>

@@ -1,5 +1,5 @@
 <?php
-echo '<link rel="stylesheet" href="/Asset/css/dashindex.css">';
+$css = 'dashindex';
 ?>
 
 <div class="vide"></div>
@@ -14,7 +14,7 @@ echo '<link rel="stylesheet" href="/Asset/css/dashindex.css">';
                     <div class="card-body">
 
                         <form action="/DashRapport/updateRapport/<?= $rapport->id ?>" method="POST">
-                        <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                             <input type="hidden" name="id" value="<?= $rapport->id ?>" />
 
                             <div class="form-group mb-3">
@@ -32,15 +32,33 @@ echo '<link rel="stylesheet" href="/Asset/css/dashindex.css">';
                                 <input type="text" class="form-control" id="status" name="status" value="<?= $rapport->status ?>" placeholder="Ex : Actif, Repos, Malade..." required>
                             </div>
 
-                            <?php if (isset($_SESSION['role']) && ($_SESSION['role'] === 'admin' || $_SESSION['role'] === 'vétérinaire')): ?>
+                            <?php if (isset($_SESSION['role']) && ($_SESSION['role'] === 'vétérinaire')): ?>
                                 <div class="form-group mb-3">
                                     <label for="nourriture">Nourriture recommandée</label>
-                                    <input type="text" class="form-control" id="nourriture" name="nourriture_reco" value="<?= $rapport->nourriture_reco ?>" placeholder="Type de nourriture" required>
+                                    <input type="text" class="form-control" id="nourriture" name="nourriture_reco"
+                                        value="<?= $rapport->nourriture_reco ?>"
+                                        placeholder="Type de nourriture" required>
                                 </div>
 
                                 <div class="form-group mb-3">
                                     <label for="grammage">Grammage recommandé (en grammes)</label>
-                                    <input type="number" class="form-control" id="grammage" name="grammage_reco" value="<?= $rapport->grammage_reco ?>" placeholder="Grammage en grammes" required>
+                                    <input type="number" class="form-control" id="grammage" name="grammage_reco"
+                                        value="<?= $rapport->grammage_reco ?>"
+                                        placeholder="Grammage en grammes" required>
+                                </div>
+                            <?php else: ?>
+                                <div class="form-group mb-3">
+                                    <label for="nourriture">Nourriture recommandée</label>
+                                    <input type="text" class="form-control" id="nourriture" name="nourriture_reco"
+                                        value="<?= $rapport->nourriture_reco ?>"
+                                        placeholder="Type de nourriture" readonly>
+                                </div>
+
+                                <div class="form-group mb-3">
+                                    <label for="grammage">Grammage recommandé (en grammes)</label>
+                                    <input type="number" class="form-control" id="grammage" name="grammage_reco"
+                                        value="<?= $rapport->grammage_reco ?>"
+                                        placeholder="Grammage en grammes" readonly>
                                 </div>
                             <?php endif; ?>
 

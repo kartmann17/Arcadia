@@ -2,20 +2,20 @@
 
 namespace App\Controllers;
 
-use App\Models\AnimauxModel;
-use App\Models\UniversModel;
-use App\Models\RaceModel;
+use App\Repository\AnimauxRepository;
+use App\Repository\UniversRepository;
+use App\Repository\RaceRepository;
 class AnimauxController extends Controller
 {
     public function index()
     {
         $title = "Nos Animaux";
-        $AnimauxModels = new AnimauxModel();
-        $animaux = $AnimauxModels->findAll();
-        $universModels = new UniversModel();
-        $univers = $universModels->findAll();
-        $raceModels = new RaceModel();
-        $races = $raceModels->findAll();
+        $AnimauxRepository = new AnimauxRepository();
+        $animaux = $AnimauxRepository->findAll();
+        $universRepository = new UniversRepository();
+        $univers = $universRepository->findAll();
+        $raceRepository = new RaceRepository();
+        $races = $raceRepository->findAll();
         $this->render("animaux/index", [
             'animaux' => $animaux,
             'univers' => $univers,
@@ -26,29 +26,39 @@ class AnimauxController extends Controller
 
     // compteur de visite
     public function incrementVisits()
-    {
-        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            http_response_code(405);
-            echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
-            return;
-        }
+{
 
-        $data = json_decode(file_get_contents('php://input'), true);
-
-        if (!isset($data['id'])) {
-            http_response_code(400);
-            echo json_encode(['success' => false, 'message' => 'ID manquant']);
-            return;
-        }
-
-        $AnimauxModel = new AnimauxModel();
-        $success = $AnimauxModel->incrementVisits(intval($data['id']));
-
-        $response = $success
-            ? ['success' => true]
-            : ['success' => false, 'message' => 'Erreur lors de la mise à jour'];
-
-        echo json_encode($response);
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+        http_response_code(405);
+        echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
+        return;
     }
+
+    $data = json_decode(file_get_contents('php://input'), true);
+
+    if (empty($data['id'])) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'ID manquant']);
+        return;
+    }
+
+    $animalId = intval($data['id']);
+    if ($animalId <= 0) {
+        http_response_code(400);
+        echo json_encode(['success' => false, 'message' => 'ID invalide']);
+        return;
+    }
+
+    $animauxRepository = new AnimauxRepository();
+    $success = $animauxRepository->incrementVisits($animalId);
+
+    if ($success) {
+        http_response_code(200);
+        echo json_encode(['success' => true, 'message' => 'Visite incrémentée.']);
+    } else {
+        http_response_code(500);
+        echo json_encode(['success' => false, 'message' => 'Erreur lors de la mise à jour.']);
+    }
+}
 
 }

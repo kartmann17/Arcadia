@@ -1,5 +1,5 @@
 <?php
-echo '<link rel="stylesheet" href="/Asset/css/nosanimaux.css">';
+$css = 'nosanimaux';
 ?>
 
 <div class="vide"></div>
@@ -9,7 +9,7 @@ echo '<link rel="stylesheet" href="/Asset/css/nosanimaux.css">';
     <?php foreach ($animaux as $animal): ?>
         <div class="col">
             <div class="card m-auto w-75 h-100 d-flex flex-column">
-                <img src="/Asset/Images/<?= htmlspecialchars($animal->img, ENT_QUOTES, 'UTF-8') ?>" class="card-img-top image" alt="Animal Image" />
+                <img src="<?= htmlspecialchars($animal->img, ENT_QUOTES, 'UTF-8') ?>" class="card-img-top image" alt="Animal Image" />
                 <div class="card-body overflow-auto text-center d-flex flex-column justify-content-between">
                     <div>
                         <h5 class="card-title"><?= htmlspecialchars($animal->nom, ENT_QUOTES, 'UTF-8'); ?></h5>
@@ -29,17 +29,17 @@ echo '<link rel="stylesheet" href="/Asset/css/nosanimaux.css">';
 
                     </div>
 
-                    <button class="btn btm mt-3 w-100 mt-auto"
-                        data-animal-id="<?= htmlspecialchars($animal->id, ENT_QUOTES, 'UTF-8') ?>"
-                        onclick='
-                        showModal("<?= htmlspecialchars($animal->nom, ENT_QUOTES, 'UTF-8') ?>",
-                        "<?= htmlspecialchars($animal->age, ENT_QUOTES, 'UTF-8') ?>",
-                        "<?= isset($race->race) ? htmlspecialchars($race->race, ENT_QUOTES, 'UTF-8') : "Non défini" ?>",
-                        "<?= isset($univer->nom) ? htmlspecialchars($univer->nom, ENT_QUOTES, 'UTF-8') : "Non défini" ?>",
-                        "<?= htmlspecialchars($animal->description, ENT_QUOTES, 'UTF-8') ?>",
-                        "/Asset/Images/<?= htmlspecialchars($animal->img, ENT_QUOTES, 'UTF-8') ?>");'>
-                        Détails
-                    </button>
+                    <button
+    class="btn btm mt-3 w-100 mt-auto"
+    data-animal-id="<?= htmlspecialchars($animal->id, ENT_QUOTES, 'UTF-8') ?>"
+    onclick='
+    showModal("<?= htmlspecialchars($animal->nom, ENT_QUOTES, 'UTF-8') ?>",
+    "<?= htmlspecialchars($animal->age, ENT_QUOTES, 'UTF-8') ?>",
+    "<?= isset($race->race) ? htmlspecialchars($race->race, ENT_QUOTES, 'UTF-8') : "Non défini" ?>",
+    "<?= isset($univer->nom) ? htmlspecialchars($univer->nom, ENT_QUOTES, 'UTF-8') : "Non défini" ?>",
+    "<?= htmlspecialchars($animal->description, ENT_QUOTES, 'UTF-8') ?>");'>
+    Détails
+</button>
                 </div>
             </div>
         </div>
@@ -54,7 +54,6 @@ echo '<link rel="stylesheet" href="/Asset/css/nosanimaux.css">';
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body text-center">
-                <img id="modal-animal-img" src="" class="img-fluid mb-3" alt="Image de l'animal">
                 <p><strong>Nom :</strong> <span id="modal-animal-name"></span></p>
                 <p><strong>Âge :</strong> <span id="modal-animal-age"></span> Ans</p>
                 <p><strong>Race :</strong> <span id="modal-animal-race"></span></p>

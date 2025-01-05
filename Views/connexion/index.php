@@ -1,6 +1,7 @@
 <?php
-echo '<link rel="stylesheet" href="/Asset/css/pageConnexion.css">';
+$css = 'pageConnexion';
 ?>
+
 
 <div class="vh-100 w-100 d-flex align-items-center justify-content-center first" id="mainBgn">
     <div class="formContainer">

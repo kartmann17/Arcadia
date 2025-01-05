@@ -1,5 +1,5 @@
 <?php
-echo '<link rel="stylesheet" href="/Asset/css/dashindex.css">';
+$css = 'dashindex';
 ?>
 
 <div class="vide"></div>

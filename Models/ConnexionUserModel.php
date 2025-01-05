@@ -10,21 +10,7 @@ class ConnexionUserModel extends Model
     protected $email;
     protected $pass;
     protected $id_role;
-    
-    public function __construct()
-    {
-        $this->table = "User";
-    }
-    public function recherche($email)
-    {
-        return $this->req(
-            "SELECT u.id, u.nom, u.prenom, u.email, u.pass, r.role
-            FROM User u
-            JOIN Role r ON u.id_role = r.id
-            WHERE u.email = :email",
-            ['email' => $email]
-        )->fetch();
-    }
+
 
     /**
      * Get the value of id_role

@@ -2,86 +2,102 @@
 
 namespace App\Controllers;
 
-use App\Models\ServicesModel;
+use App\Repository\ServicesRepository;
+use App\Services\CloudinaryService;
+use App\Services\servicesService;
 
 class DashServicesController extends DashController
 {
     public function ajoutService()
     {
-        $ServicesModel = new ServicesModel();
-        $services = $ServicesModel->findAll();
+        $servicesRepository = new ServicesRepository();
+        $cloudinaryService = new CloudinaryService();
+
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $imgPath = null;
 
-            // Récupération des données du formulaire
-            $nom = $_POST['nom'] ?? '';
-            $description = $_POST['description'] ?? '';
-            $id_user = $_SESSION['id'];
-            $img = $_POST['img'] ?? '';
+            // Gestion de l'image avec Cloudinary
+            if (isset($_FILES['img']) && $_FILES['img']['error'] === UPLOAD_ERR_OK) {
+                $tmpName = $_FILES['img']['tmp_name'];
 
-            // Vérification que tous les champs sont remplis
-            if (!empty($nom) && !empty($description) && !empty($id_user) && !empty($img)) {
+                // Téléversement sur Cloudinary
+                $cloudinaryService = new CloudinaryService();
+                $imgPath = $cloudinaryService->uploadFile($tmpName);
 
-                // Appel du modèle pour l'insertion en base
-                $ServicesModel = new ServicesModel();
-                $result = $ServicesModel->createService($nom, $description, $id_user, $img);
-
-                if ($result) {
-                    $_SESSION["success_message"] = "Service ajouté avec succès.";
-                } else {
-                    $_SESSION["error_message"] = "Erreur lors de l'ajout du Service";
+                if (!$imgPath) {
+                    $_SESSION['error_message'] = "Erreur lors du téléversement de l'image.";
+                    header("Location: /addservice");
+                    exit();
                 }
-
-                // Redirection après traitement
-                header("Location: /dash");
-                exit();
-            } else {
-                echo "Tous les champs sont requis.";
             }
-        }
-        if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin' || $_SESSION['role'] === 'employé') {
 
-            $this->render('dash/index', [
-                'section' => 'addservice'
-            ]);
+            $data = [
+                'nom' => $_POST['nom'] ?? null,
+                'description' => $_POST['description'] ?? null,
+                'img' => $imgPath,
+                'id_user' => $_SESSION['id_user'],
+            ];
+
+            // Insertion en base de données
+            $servicesRepository = new ServicesRepository();
+            $result = $servicesRepository->createService(
+                $data['nom'],
+                $data['description'],
+                $data['id_user'],
+                $data['img'],
+            );
+
+            if ($result) {
+                $_SESSION["success_message"] = "Service ajouté avec succès.";
+            } else {
+                $_SESSION["error_message"] = "Erreur lors de l'ajout du service.";
+            }
+
+            header("Location: /DashServices/liste");
+            exit();
         } else {
-            http_response_code(404);
+            $_SESSION['error_message'] = "Tous les champs sont requis.";
+            header("Location: /addservice");
+            exit();
         }
+
+        $this->render('dash/addservice', [
+            'title' => "Ajout d'un service",
+        ]);
     }
 
 
 
     public function updateServices($id)
     {
-        $ServicesModel = new ServicesModel();
-        $services = $ServicesModel->find($id);
+        $servicesRepository = new ServicesRepository();
+        $servicesService = new ServicesService();
+
+        $services = $servicesRepository->find($id);
+        if (!$services) {
+            throw new \Exception("Service introuvable.");
+        }
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+            $servicesService->updateService($id);
 
-            // Vérification que tous les champs sont remplis
-            $ServicesModel->hydrate($_POST);
-
-            // Appel du modèle pour l'insertion en base
-            if ($ServicesModel->update($id)) {
-
-
-                $_SESSION["success_message"] = "Service modifié avec succès.";
-            } else {
-                $_SESSION["error_message"] = "Erreur lors de la modification.";
-            }
-
-            // Redirection après traitement
+            $_SESSION["success_message"] = "Service modifié avec succès.";
             header("Location: /dash");
             exit;
         }
 
-        if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin' || $_SESSION['role'] === 'employé') {
+        if (isset($_SESSION['role']) && ($_SESSION['role'] === 'admin' || $_SESSION['role'] === 'employé')) {
             $this->render('dash/updateservices', [
-                'services' => $services
+                'services' => $services,
+                'title' => "Mise à jour service"
             ]);
         } else {
-            http_response_code(404);
+
+            http_response_code(403);
+            echo "Accès interdit.";
+            exit;
         }
     }
 
@@ -89,9 +105,9 @@ class DashServicesController extends DashController
     // affichage de la liste des services
     public function liste()
     {
-        $ServicesModels = new ServicesModel();
-        $services = $ServicesModels->findAll();
-        // Affichage de la page des services
+        $ServicesRepository = new ServicesRepository();
+        $services = $ServicesRepository->findAll();
+
         if (isset($_SESSION['id_User'])) {
             $this->render("dash/listeservices", [
                 "services" => $services
@@ -106,26 +122,47 @@ class DashServicesController extends DashController
     public function deleteService()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                $ServicesModels = new ServicesModel();
+                $servicesRepository = new ServicesRepository();
+                $cloudinaryService = new CloudinaryService();
 
-                $result = $ServicesModels->deleteById($id);
+                // Trouver le service correspondant
+                $service = $servicesRepository->find($id);
 
-                if ($result) {
-                    $_SESSION['success_message'] = "Le service a été supprimé avec succès.";
+                if ($service) {
+                    // Supprimer l'image associée si elle existe
+                    if (!empty($service->img)) {
+                        $publicId = $cloudinaryService->getPublicIdFromUrl($service->img);
+                        $cloudinaryService->deleteFile($publicId);
+                    }
+
+                    // Supprimer le service de la base de données
+                    $result = $servicesRepository->deleteById($id);
+
+                    if ($result) {
+                        $_SESSION['success_message'] = "Le service a été supprimé avec succès.";
+                    } else {
+                        $_SESSION['error_message'] = "Erreur lors de la suppression du service.";
+                    }
                 } else {
-                    $_SESSION['error_message'] = "Erreur lors de la suppression du service.";
+                    $_SESSION['error_message'] = "Service introuvable.";
                 }
+            } else {
+                $_SESSION['error_message'] = "ID de service invalide.";
             }
-            // Redirection vers la dashboard
+
+            // Redirection vers le dashboard
             header("Location: /dash");
             exit();
         }
-    }
 
+        // Si la méthode n'est pas POST, renvoyer une erreur
+        http_response_code(405);
+        echo "Méthode non autorisée.";
+        exit();
+    }
 
 
     public function index()

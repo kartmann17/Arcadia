@@ -1,5 +1,5 @@
 <?php
-echo '<link rel="stylesheet" href="/Asset/css/dashindex.css">';
+$css = 'dashindex';
 ?>
 
 <div class="vide"></div>
@@ -14,7 +14,7 @@ echo '<link rel="stylesheet" href="/Asset/css/dashindex.css">';
                     </div>
                     <div class="card-body">
 
-                        <form action="/DashAnimaux/ajoutAnimaux" method="POST">
+                        <form action="/DashAnimaux/ajoutAnimaux" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                             <!-- Nom -->
                             <div class="mb-3">

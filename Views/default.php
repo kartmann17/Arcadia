@@ -12,7 +12,10 @@
   <?php if (isset($link)) {
     echo $link;
   } ?>
-  <link rel="icon" type="image/png" href="/Asset/Icones/favicon.ico">
+  <?php if(isset($css)): ?>
+    <link href="/Asset/css/<?= $css ?>.css" rel="stylesheet">
+    <?php endif; ?>
+  <link rel="icon" type="image/png" href="https://res.cloudinary.com/dr7jxgr70/image/upload/v1736107751/favicon_kcht9f.ico">
   <link rel="stylesheet" href="/Asset/css/defaultNav.css">
   <link rel="stylesheet" href="/Asset/css/defaultFooter.css">
   <?php if (isset($script)) {
@@ -29,7 +32,7 @@
       <nav role="navigation">
         <div class="py-1 text-center border-bottom">
           <a href="/">
-            <img class="logoA" src="/Asset/Icones/sansfond2.svg" alt="logo principal">
+            <img class="logoA" src="https://res.cloudinary.com/dr7jxgr70/image/upload/v1736107751/sansfond2_m4y1a6.svg" alt="logo principal">
           </a>
         </div>
       </nav>

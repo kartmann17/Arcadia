@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\AvisModel;
+use App\Repository\AvisRepository;
 use App\Models\HorairesModel;
 
 class MainController extends Controller
@@ -10,8 +10,8 @@ class MainController extends Controller
     public function index()
     {
         $title = "Zoo Arcadia";
-        $AvisModel = new AvisModel();
-        $Avis = $AvisModel->findAll();
+        $AvisRepository = new AvisRepository();
+        $Avis = $AvisRepository->findAll();
 
         $HorairesModel = new HorairesModel();
         $horaires = $HorairesModel->getAllHoraires();

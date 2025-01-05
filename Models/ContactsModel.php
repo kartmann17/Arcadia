@@ -10,35 +10,65 @@ class ContactsModel extends Model
     protected $email;
     protected $message;
 
-    public function __construct()
-    {
-        $this->table = 'contacts';
-    }
-    public function afficheMessage()
-    {
-        // Requête SQL pour récupérer tous les messages
-        $sql = "SELECT * FROM  {$this->table}";
-        return $this->req($sql)->fetchAll();
 
+
+    /**
+     * Get the value of nom
+     */
+    public function getNom()
+    {
+        return $this->nom;
     }
 
-    // Enregistrer un message
-    public function saveMessage($nom, $email, $message)
+    /**
+     * Set the value of nom
+     *
+     * @return  self
+     */
+    public function setNom($nom)
     {
+        $this->nom = $nom;
 
-        // Préparation et exécution de la requête
-        return $this->req(
-            "INSERT INTO {$this->table} (nom, email, message) VALUES (:nom, :email, :message)",
-            attributs: [
-                'nom' => $nom,
-                'email' => $email,
-                'message' => $message
-            ]
-        );
+        return $this;
     }
 
-    public function deleteById($id)
+    /**
+     * Get the value of email
+     */
+    public function getEmail()
     {
-        return $this->delete($id);
+        return $this->email;
+    }
+
+    /**
+     * Set the value of email
+     *
+     * @return  self
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of message
+     */
+    public function getMessage()
+    {
+        return $this->message;
+    }
+
+    /**
+     * Set the value of message
+     *
+     * @return  self
+     */
+    public function setMessage($message)
+    {
+        $this->message = $message;
+
+        return $this;
     }
 }

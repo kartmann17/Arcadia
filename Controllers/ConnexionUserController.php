@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Models\ConnexionUserModel;
+use App\Repository\ConnexionUserRepository;
 
 class ConnexionUserController extends Controller
 {
@@ -29,8 +29,8 @@ class ConnexionUserController extends Controller
             }
 
             //préparation de la requette pour retouver l'email des utilsateurs
-            $ConnexionUserModel = new ConnexionUserModel();
-            $user = $ConnexionUserModel->recherche($email);
+            $ConnexionUserRepository = new ConnexionUserRepository();
+            $user = $ConnexionUserRepository->recherche($email);
 
             // Vérification du mot de passe
             if ($user && password_verify($pass, $user->pass)) {

@@ -1,6 +1,9 @@
 <?php
 echo '<link rel="stylesheet" href="/Asset/css/rgpd.css">';
 ?>
+<?php
+$css = 'rgpd';
+?>
 <div class="vide"></div>
 
 <body>

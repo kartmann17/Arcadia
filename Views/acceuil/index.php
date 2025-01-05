@@ -1,8 +1,8 @@
 <?php
-echo '<link rel="stylesheet" href="/Asset/css/mainaccueil.css">';
+$css = 'mainaccueil';
 ?>
 
-<video id="videoAC" src="/Asset/Images/Videos/20079364-uhd_2560_1440_30fps.mp4" autoplay loop muted></video>
+<video id="videoAC" src="https://res.cloudinary.com/dr7jxgr70/video/upload/v1736035009/20079364-uhd_2560_1440_30fps_n4vxcj.mp4" autoplay loop muted></video>
 <div class="title d-flex justify-content-center">
   <h1>Découvrez les Merveilles du Monde <br> Animal: Une Journée Magique au Zoo!</h1>
 </div>
@@ -41,7 +41,7 @@ echo '<link rel="stylesheet" href="/Asset/css/mainaccueil.css">';
     </div>
     <div class="images">
       <a href="<?= htmlspecialchars("Univers/showAnimaux/1", ENT_QUOTES, 'UTF-8') ?>">
-        <img src="<?= htmlspecialchars("/Asset/Images/lion_paysage.webp", ENT_QUOTES, 'UTF-8') ?>" class="img-fluid" alt="<?= htmlspecialchars("lion", ENT_QUOTES, 'UTF-8') ?>">
+        <img src="<?= htmlspecialchars("https://res.cloudinary.com/dr7jxgr70/image/upload/v1736034902/lion_paysage_xadnlb.webp", ENT_QUOTES, 'UTF-8') ?>" class="img-fluid" alt="<?= htmlspecialchars("lion", ENT_QUOTES, 'UTF-8') ?>">
       </a>
     </div>
 
@@ -53,7 +53,7 @@ echo '<link rel="stylesheet" href="/Asset/css/mainaccueil.css">';
     </div>
     <div class="images">
       <a href="<?= htmlspecialchars("Univers/showAnimaux/2", ENT_QUOTES, 'UTF-8') ?>">
-        <img src="<?= htmlspecialchars("/Asset/Images/perroquetpaysage2.webp", ENT_QUOTES, 'UTF-8') ?>" class="img-fluid" alt="<?= htmlspecialchars("perroquet", ENT_QUOTES, 'UTF-8') ?>">
+        <img src="<?= htmlspecialchars("https://res.cloudinary.com/dr7jxgr70/image/upload/v1736034906/perroquetpaysage3_prf5w0.webp", ENT_QUOTES, 'UTF-8') ?>" class="img-fluid" alt="<?= htmlspecialchars("perroquet", ENT_QUOTES, 'UTF-8') ?>">
       </a>
     </div>
 
@@ -65,7 +65,7 @@ echo '<link rel="stylesheet" href="/Asset/css/mainaccueil.css">';
     </div>
     <div class="images">
       <a href="<?= htmlspecialchars("Univers/showAnimaux/3", ENT_QUOTES, 'UTF-8') ?>">
-        <img src="<?= htmlspecialchars("/Asset/Images/crocopaysge.webp", ENT_QUOTES, 'UTF-8') ?>" class="img-fluid" alt="<?= htmlspecialchars("croco", ENT_QUOTES, 'UTF-8') ?>">
+        <img src="<?= htmlspecialchars("https://res.cloudinary.com/dr7jxgr70/image/upload/v1736034892/crocopaysge_ahed7s.webp", ENT_QUOTES, 'UTF-8') ?>" class="img-fluid" alt="<?= htmlspecialchars("croco", ENT_QUOTES, 'UTF-8') ?>">
       </a>
     </div>
   </div>

@@ -2,8 +2,8 @@
 
 namespace App\Controllers;
 
-use App\Models\UserModel;
-use App\Models\RoleModel;
+use App\Repository\UserRepository;
+use App\Repository\RoleRepository;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -12,10 +12,10 @@ class DashUserController extends DashController
     //Ajout des users
     public function ajoutUser()
     {
-        $userModel = new UserModel();
-        $roleModel = new RoleModel();
-        $users = $userModel->findAll();
-        $roles = $roleModel->findAll();
+        $userRepository = new UserRepository();
+        $roleRepository = new RoleRepository();
+        $users = $userRepository->findAll();
+        $roles = $roleRepository->findAll();
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -37,7 +37,7 @@ class DashUserController extends DashController
                 $hashedPass = password_hash($pass, PASSWORD_DEFAULT);
 
                 // Appel du modèle pour l'insertion
-                $result = $userModel->createUser($nom, $prenom, $email, $hashedPass, $role);
+                $result = $userRepository->createUser($nom, $prenom, $email, $hashedPass, $role);
 
                 if ($result) {
                     // Envoi de l'email à l'utilisateur (sans le mot de passe)
@@ -105,9 +105,9 @@ class DashUserController extends DashController
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                $userModel = new UserModel();
+                $userRepository = new UserRepository();
 
-                $result = $userModel->deleteById($id);
+                $result = $userRepository->deleteById($id);
 
                 if ($result) {
                     $_SESSION['success_message'] = "L'utilisateur a été supprimé avec succès.";
@@ -127,8 +127,8 @@ class DashUserController extends DashController
     //Liste des utilisateurs
     public function liste()
     {
-        $userModel = new UserModel();
-        $user = $userModel->selectAllRole();
+        $userRepository = new UserRepository();
+        $user = $userRepository->selectAllRole();
         if (isset($_SESSION['id_User'])) {
             $this->render(
                 'dash/listeuser',

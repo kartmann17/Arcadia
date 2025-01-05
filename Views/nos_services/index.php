@@ -1,5 +1,6 @@
+
 <?php
-echo '<link rel="stylesheet" href="/Asset/css/nosservices.css">';
+$css = 'nosservices';
 ?>
 
 <div class="vide"></div>
@@ -18,7 +19,7 @@ echo '<link rel="stylesheet" href="/Asset/css/nosservices.css">';
                             </button>
                         </div>
                         <div class="images">
-                            <img src="/Asset/Images/<?= $service->img ?>" class="img-fluid"
+                            <img src="<?= $service->img ?>" class="img-fluid"
                                 alt="service train, visite guidé, restauration" loading="lazy">
                         </div>
                         <div class="description w-100 m-auto mt-5 overflow-auto d-flex align-items-center">

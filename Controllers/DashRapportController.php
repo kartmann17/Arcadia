@@ -2,9 +2,10 @@
 
 namespace App\Controllers;
 
-use App\Models\RapportModel;
-use App\Models\AnimauxModel;
-use App\Models\UserModel;
+use App\Repository\RapportRepository;
+use App\Repository\AnimauxRepository;
+use App\Services\rapportService;
+
 
 
 class DashRapportController extends DashController
@@ -12,8 +13,8 @@ class DashRapportController extends DashController
     // affichage de la liste des rapports
     public function liste()
     {
-        $RapportModel = new RapportModel();
-        $rapports = $RapportModel->findAll();
+        $RapportRepository = new RapportRepository();
+        $rapports = $RapportRepository->findAll();
         if (isset($_SESSION['id_User'])) {
             $title = "Liste Rapports";
             $this->render(
@@ -43,8 +44,8 @@ class DashRapportController extends DashController
         exit;
     }
 
-    $AnimauxModels = new AnimauxModel();
-    $animaux = $AnimauxModels->findAll();
+    $AnimauxRepository = new AnimauxRepository();
+    $animaux = $AnimauxRepository->findAll();
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -69,8 +70,8 @@ class DashRapportController extends DashController
         }
 
         // Appel du modèle pour enregistrer le rapport
-        $RapportModel = new RapportModel();
-        $result = $RapportModel->saveRapport($nom, $date, $status, $nourriture_reco, $grammage_reco, $sante, $repas_donnees, $quantite, $commentaire, $id_User, $id_animal);
+        $RapportRepository = new RapportRepository();
+        $result = $RapportRepository->saveRapport($nom, $date, $status, $nourriture_reco, $grammage_reco, $sante, $repas_donnees, $quantite, $commentaire, $id_User, $id_animal);
 
         if ($result) {
             $_SESSION['success_message'] = "Rapport ajouté avec succès.";
@@ -85,33 +86,39 @@ class DashRapportController extends DashController
 
     //mise a jour d'un rapport
     public function updateRapport($id)
-    {
+{
+    $animauxRepository = new AnimauxRepository();
+    $rapportService = new RapportService();
 
-        $AnimauxModels = new AnimauxModel();
-        $animaux = $AnimauxModels->findAll();
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        try {
+            $rapportService->updateRapport($id);
 
-
-        $RapportModel = new RapportModel();
-        $rapport = $RapportModel->find($id);
-
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-            $RapportModel->hydrate($_POST);
-
-            if ($RapportModel->update($id)) {
-                $_SESSION["success_message"] = "Rapport modifié avec succès.";
-            } else {
-                $_SESSION["error_message"] = "Erreur lors de la modification.";
-            }
-            // Redirection après le traitement
-            header("Location: /DashRapport/liste");
-            exit;
+            $_SESSION["success_message"] = "Rapport modifié avec succès.";
+        } catch (\Exception $e) {
+            $_SESSION["error_message"] = $e->getMessage();
         }
-        $this->render('dash/updaterapport', [
-            'animaux' => $animaux,
-            'rapport' => $rapport
-        ]);
+
+        // Redirection après traitement
+        header("Location: /DashRapport/liste");
+        exit;
     }
+
+    $rapportRepository = new RapportRepository();
+    $rapport = $rapportRepository->find($id);
+
+    if (!$rapport) {
+        throw new \Exception("Rapport introuvable.");
+    }
+
+    $animaux = $animauxRepository->findAll();
+
+    $this->render('dash/updaterapport', [
+        'animaux' => $animaux,
+        'rapport' => $rapport,
+        'title' => "Modifier Rapport",
+    ]);
+}
 
 
     // suppression d'un raport
@@ -127,9 +134,9 @@ class DashRapportController extends DashController
             $id = $_POST['id'] ?? null;
 
             if ($id) {
-                $RapportModel = new RapportModel();
+                $RapportRepository = new RapportRepository();
 
-                $result = $RapportModel->deleteById($id);
+                $result = $RapportRepository->deleteById($id);
 
                 if ($result) {
                     $_SESSION['success_message'] = "Le rapport a été supprimé avec succès.";
@@ -146,10 +153,10 @@ class DashRapportController extends DashController
     // affichage de la page ajout rapport
     public function index()
     {
-        $AnimauxModels = new AnimauxModel();
-        $animaux = $AnimauxModels->findAll();
-        $RapportModel = new RapportModel();
-        $rapport = $RapportModel->findAll();
+        $AnimauxRepository = new AnimauxRepository();
+        $animaux = $AnimauxRepository->findAll();
+        $RapportRepository = new RapportRepository();
+        $rapport = $RapportRepository->findAll();
         if (isset($_SESSION['id_User'])) {
             // Affichage de la page des rapports
             $this->render("dash/addrapport", compact('animaux', 'rapport'));
