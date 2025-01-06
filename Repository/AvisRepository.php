@@ -23,7 +23,7 @@ class AvisRepository extends Repository
         // Préparation et exécution de la requête
         return $this->req(
             "INSERT INTO {$this->table} (etoiles, nom, commentaire, date) VALUES (:etoiles, :nom, :commentaire, :date)",
-            attributs: [
+            [
                 'etoiles' => $etoiles,
                 'nom' => $nom,
                 'commentaire' => $commentaire,
