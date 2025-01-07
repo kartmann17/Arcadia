@@ -95,11 +95,11 @@ $css = 'dashindex';
 
             <?php if (isset($_SESSION['role']) && ($_SESSION['role'] === 'admin')): ?>
                 <div class="col-12 col-sm-6 col-md-3 admin-link-container">
-                    <a href="/DashHoraires" class="admin-link">Ajout Horaire</a>
+                    <a href="/DashHoraire" class="admin-link">Ajout Horaire</a>
                 </div>
 
                 <div class="col-12 col-sm-6 col-md-3 admin-link-container">
-                    <a href="/DashHoraires/liste" class="admin-link">Liste des horaires</a>
+                    <a href="/DashHoraire/liste" class="admin-link">Liste des horaires</a>
                 </div>
             <?php endif; ?>
         </div>

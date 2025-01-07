@@ -14,7 +14,7 @@ $css = 'dashindex';
                     </div>
                     <div class="card-body">
 
-                        <form action="/DashHoraires/addHoraire" method="POST">
+                        <form action="/DashHoraire/addHoraire" method="POST">
                             <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
 
                             <!-- Jour -->

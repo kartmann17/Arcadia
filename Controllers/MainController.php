@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Repository\AvisRepository;
-use App\Models\HorairesModel;
+use App\Repository\HoraireRepository;
 
 class MainController extends Controller
 {
@@ -13,8 +13,9 @@ class MainController extends Controller
         $AvisRepository = new AvisRepository();
         $Avis = $AvisRepository->findAll();
 
-        $HorairesModel = new HorairesModel();
-        $horaires = $HorairesModel->getAllHoraires();
+        $HoraireRepository = new HoraireRepository();
+        $alias = 'horaires';
+        $horaires = $HoraireRepository->findAll($alias);
         $this->render("acceuil/index", compact("Avis", "horaires", "title"));  //Affichage des avis validé depuis le dashboard sur la page d'accueil
     }
 

@@ -13,7 +13,7 @@ $css = 'dashindex';
                     </div>
                     <div class="card-body">
 
-                        <form action="/DashHoraires/updateHoraire/<?= $horaire['_id'] ?>" method="POST">
+                        <form action="/DashHoraire/updateHoraire/<?= $horaire['_id'] ?>" method="POST">
                         <input type="hidden" name="csrf_token" value="<?=$_SESSION['csrf_token'];?>">
                             <!-- Jour -->
                             <div class="mb-3">
