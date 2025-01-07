@@ -9,11 +9,11 @@ $css = 'dashindex';
     <table class="table table-bordered table-striped">
         <thead class="table-dark">
             <tr>
-                <th>ETOILES</th>
+                <th>Étoiles</th>
                 <th>Nom</th>
                 <th>Commentaire</th>
-                <th>date</th>
-                <th>Actions</th>
+                <th>Date</th>
+                <th class="text-center" style="width: 200px;">Actions</th>
             </tr>
         </thead>
         <?php foreach ($Avis as $avis): ?>
@@ -25,16 +25,18 @@ $css = 'dashindex';
                     <td><?= $avis->date ?></td>
                     <td>
                         <div class="d-flex justify-content-between">
-                            <form action="/DashValideAvis/validerAvis" method="POST" onsubmit="return confirm('etes vous sur de vouloir valider l\'avis ?');">
-                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                            <!-- Bouton Valider -->
+                            <form action="/DashValideAvis/validerAvis" method="POST" class="w-100 mx-1" onsubmit="return confirm('Êtes-vous sûr de vouloir valider cet avis ?');">
+                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                 <input type="hidden" name="id" value="<?= $avis->id ?>">
-                                <button class="btn btn-success btn-sm">Valider</button>
+                                <button type="submit" class="btn btn-success w-100">Valider</button>
                             </form>
 
-                            <form action="/DashValideAvis/deleteAvis" method="POST" onsubmit="return confirm('etes vous sur de vouloir supprimer cette avis ?');">
-                            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                            <!-- Bouton Supprimer -->
+                            <form action="/DashValideAvis/deleteAvis" method="POST" class="w-100 mx-1" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet avis ?');">
+                                <input type="hidden" name="csrf_token" value="<?= $_SESSION['csrf_token'] ?>">
                                 <input type="hidden" name="id" value="<?= $avis->id ?>">
-                                <button class="btn btn-danger btn-sm">Supprimer</button>
+                                <button type="submit" class="btn btn-danger w-100">Supprimer</button>
                             </form>
                         </div>
                     </td>

@@ -133,6 +133,7 @@ h2 {
 .table th {
   vertical-align: middle;
   text-align: center;
+  font-family: "Roboto Serif";
 }
 
 .table .img-thumbnail {

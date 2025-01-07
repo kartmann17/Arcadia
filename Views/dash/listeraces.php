@@ -11,25 +11,30 @@ $css = 'dashindex';
             <thead class="table-dark">
                 <tr>
                     <th>Nom</th>
-                    <th>Actions</th>
+                    <th class="text-center" style="width: 200px;">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($races as $race): ?>
                     <tr>
-                        <td><?= $race->race ?></td>
+                        <td><?= htmlspecialchars($race->race, ENT_QUOTES, 'UTF-8') ?></td>
                         <td>
                             <?php if (isset($_SESSION['role']) && ($_SESSION['role'] === 'admin' || $_SESSION['role'] === 'vétérinaire')): ?>
-                            <div class="d-flex justify-content-between">
-                                <a href="/DashRace/updateRace/<?= $race->id ?>" class="btn btn-warning">Modifier</a>
+                                <div class="d-flex justify-content-between">
+                                    <!-- Bouton Modifier -->
+                                    <a href="/DashRace/updateRace/<?= htmlspecialchars($race->id, ENT_QUOTES, 'UTF-8') ?>"
+                                       class="btn btn-warning w-100 mx-1">Modifier</a>
 
-                                <form action="/DashRace/deleteRace" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette race ?');">
-                                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                                    <input type="hidden" name="id" value="<?= $race->id ?>">
-                                    <button class="btn btn-danger btn-sm">Supprimer</button>
-                                </form>
-                            </div>
-                            <?php endif;?>
+                                    <!-- Bouton Supprimer -->
+                                    <form action="/DashRace/deleteRace" method="POST"
+                                          onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette race ?');"
+                                          class="w-100 mx-1">
+                                        <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+                                        <input type="hidden" name="id" value="<?= htmlspecialchars($race->id, ENT_QUOTES, 'UTF-8') ?>">
+                                        <button type="submit" class="btn btn-danger w-100">Supprimer</button>
+                                    </form>
+                                </div>
+                            <?php endif; ?>
                         </td>
                     </tr>
                 <?php endforeach; ?>

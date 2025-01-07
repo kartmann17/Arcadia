@@ -33,11 +33,11 @@ $css = 'dashindex';
                         <td><?= $animal->description ?></td>
                         <td>
                             <div class="d-flex justify-content-between">
-                                <a href="/DashAnimaux/updateAnimal/<?= $animal->id ?>" class="btn btn-warning ">Modifier</a>
+                                <a href="/DashAnimaux/updateAnimal/<?= $animal->id ?>" class="btn btn-warning  w-100 mx-1 ">Modifier</a>
                                 <form action="/DashAnimaux/deleteAnimal" method="POST" onsubmit="return confirm('êtes-vous sûr de vouloir supprimer cet animal ?');">
                                     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                                     <input type="hidden" name="id" value="<?= $animal->id ?>">
-                                    <button class="btn btn-danger btn-sm">Supprimer</button>
+                                    <button class="btn btn-danger w-100 ">Supprimer</button>
                                 </form>
                             </div>
                         </td>

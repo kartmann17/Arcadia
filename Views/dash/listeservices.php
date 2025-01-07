@@ -27,12 +27,12 @@ $css = 'dashindex';
                         <td><?= $service->description ?></td>
                         <td>
                             <div class="d-flex justify-content-between">
-                                <a href="/DashServices/updateServices/<?= $service->id ?>" class="btn btn-warning ">Modifier</a>
+                                <a href="/DashServices/updateServices/<?= $service->id ?>" class="btn btn-warning w-100 mx-1">Modifier</a>
                                 <?php if (isset($_SESSION['role']) && $_SESSION['role'] !== 'employé'): ?>
                                     <form action="/DashServices/deleteService" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce service ?');">
                                         <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                                         <input type="hidden" name="id" value="<?= $service->id ?>">
-                                        <button class="btn btn-danger btn-sm">Supprimer</button>
+                                        <button class="btn btn-danger w-100">Supprimer</button>
                                     </form>
                                 <?php endif; ?>
                             </div>

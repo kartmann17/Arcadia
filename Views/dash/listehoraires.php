@@ -13,23 +13,28 @@ $css = 'dashindex';
                     <th>Jour</th>
                     <th>Heure d'ouverture</th>
                     <th>Heure de fermeture</th>
-                    <th>Actions</th>
+                    <th class="text-center" style="width: 200px;">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <?php foreach ($horaires as $horaire): ?>
-
                     <tr>
-                        <td><?= $horaire->jour ?></td>
-                        <td><?= $horaire->ouverture ?></td>
-                        <td><?= $horaire->fermeture ?></td>
+                        <td><?= htmlspecialchars($horaire->jour, ENT_QUOTES, 'UTF-8') ?></td>
+                        <td><?= htmlspecialchars($horaire->ouverture, ENT_QUOTES, 'UTF-8') ?></td>
+                        <td><?= htmlspecialchars($horaire->fermeture, ENT_QUOTES, 'UTF-8') ?></td>
                         <td>
                             <div class="d-flex justify-content-between">
-                                <a href="/DashHoraire/updateHoraire/<?= $horaire->_id ?>" class="btn btn-warning">Modifier</a>
-                                <form action="/DashHoraire/deleteHoraire/<?= $horaire->_id ?>" method="POST" onsubmit="return confirm('êtes-vous sûr de vouloir supprimer cet horaire ?');">
-                                    <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                                    <input type="hidden" name="id" value="<?= $horaire->_id ?>">
-                                    <button class="btn btn-danger btn-sm">Supprimer</button>
+                                <!-- Bouton Modifier -->
+                                <a href="/DashHoraire/updateHoraire/<?= htmlspecialchars($horaire->_id, ENT_QUOTES, 'UTF-8') ?>"
+                                   class="btn btn-warning w-100 mx-1">Modifier</a>
+
+                                <!-- Bouton Supprimer -->
+                                <form action="/DashHoraire/deleteHoraire" method="POST"
+                                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cet horaire ?');"
+                                      class="w-100 mx-1">
+                                    <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'], ENT_QUOTES, 'UTF-8') ?>">
+                                    <input type="hidden" name="id" value="<?= htmlspecialchars($horaire->_id, ENT_QUOTES, 'UTF-8') ?>">
+                                    <button type="submit" class="btn btn-danger w-100">Supprimer</button>
                                 </form>
                             </div>
                         </td>

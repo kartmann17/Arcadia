@@ -65,14 +65,14 @@ $css = 'dashindex';
                         <td>
                         <?php if (isset($_SESSION['role']) && $_SESSION['role'] !== 'admin' ): ?>
                             <div class="d-flex justify-content-between">
-                                <a href="/DashRapport/updateRapport/<?= $rapport->id ?>" class="btn btn-warning">Modifier</a>
+                                <a href="/DashRapport/updateRapport/<?= $rapport->id ?>" class="btn btn-warning w-100 mx-1">Modifier</a>
                                 <?php endif;?>
 
                                 <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'vétérinaire'): ?>
                                 <form action="/DashRapport/deleteRapport" method="POST" onsubmit="return confirm('êtes-vous sûr de vouloir supprimer ce rapport ?');">
                                     <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                                     <input type="hidden" name="id" value="<?= $rapport->id ?>">
-                                    <button class="btn btn-danger btn-sm">Supprimer</button>
+                                    <button class="btn btn-danger btn-sm w-100">Supprimer</button>
                                 </form>
                                 <?php endif;?>
                             </div>
