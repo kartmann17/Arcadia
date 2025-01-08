@@ -27,38 +27,29 @@ class AnimauxController extends Controller
     // compteur de visite
     public function incrementVisits()
 {
-
-    if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-        http_response_code(405);
+    if ($_SERVER['REQUEST_METHOD'] !== 'PUT') {
+        http_response_code(405); // Méthode non autorisée
         echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']);
-        return;
+        exit();
     }
 
     $data = json_decode(file_get_contents('php://input'), true);
 
-    if (empty($data['id'])) {
+    if (empty($data['id']) || intval($data['id']) <= 0) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'ID manquant']);
-        return;
-    }
-
-    $animalId = intval($data['id']);
-    if ($animalId <= 0) {
-        http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'ID invalide']);
-        return;
     }
 
     $animauxRepository = new AnimauxRepository();
-    $success = $animauxRepository->incrementVisits($animalId);
+    $success = $animauxRepository->incrementVisits(intval($data['id']));
 
     if ($success) {
         http_response_code(200);
-        echo json_encode(['success' => true, 'message' => 'Visite incrémentée.']);
+        echo json_encode(['success' => true, 'message' => 'Visite incrémentée avec succès.']);
     } else {
         http_response_code(500);
         echo json_encode(['success' => false, 'message' => 'Erreur lors de la mise à jour.']);
     }
 }
-
 }
+
+

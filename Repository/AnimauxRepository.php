@@ -52,10 +52,11 @@ class AnimauxRepository extends Repository
     }
 
     // compteur de visite par animaux
-    public function incrementVisits(int $id)
+    public function incrementVisits(int $id): bool
     {
         $sql = 'UPDATE ' . $this->table . ' SET visite = visite + 1 WHERE id = ?';
-        return $this->req($sql, [$id]);
+        $stmt = $this->req($sql, [$id]);
+        return $stmt->rowCount() > 0;
     }
 
     //supression des animaux

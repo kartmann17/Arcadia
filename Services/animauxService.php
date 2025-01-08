@@ -58,4 +58,10 @@ class AnimauxService
     }
 }
 
+public function incrementVisit(int $id)
+{
+    $animauxRepository = new AnimauxRepository();
+    return $animauxRepository->incrementVisits($id);
+}
+
 }

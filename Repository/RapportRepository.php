@@ -15,7 +15,7 @@ class RapportRepository extends Repository
         return $this->req(
             "INSERT INTO {$this->table} (nom, date, status, nourriture_reco, grammage_reco, sante, repas_donnees, quantite, commentaire, id_User, id_animal)
             VALUES(:nom, :date, :status, :nourriture_reco, :grammage_reco, :sante, :repas_donnees, :quantite, :commentaire, :id_User, :id_animal)",
-            attributs: [
+            [
                 'nom' => $nom,
                 'date' => $date,
                 'status' => $status,

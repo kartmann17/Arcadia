@@ -22,7 +22,7 @@ class ContactsRepository extends Repository{
         // Préparation et exécution de la requête
         return $this->req(
             "INSERT INTO {$this->table} (nom, email, message) VALUES (:nom, :email, :message)",
-            attributs: [
+            [
                 'nom' => $nom,
                 'email' => $email,
                 'message' => $message
