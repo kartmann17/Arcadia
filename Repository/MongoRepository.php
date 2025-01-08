@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Config\MongoConnection;
+use App\config\MongoConnection;
 use MongoDB\BSON\ObjectId;
 
 class MongoRepository extends MongoConnection
